@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userC->addUser($user);
 
     // Redirige vers la liste des offres
-    header("Location: addUserconection.php"); // Remplacez 'listeOffres.php' par le nom correct de votre fichier de liste
+    header("Location: jenesuispasunrobot.php"); // Remplacez 'listeOffres.php' par le nom correct de votre fichier de liste
     exit();
 }
 ?>
@@ -230,7 +230,7 @@ https://templatemo.com/tm-518-sentra
                 <!-- Item -->
                 <div class="item item-2">
                     
-                      <a href="addUserconection.php" class="button">Se Connecter</a>
+                      <a href="jenesuispasunrobot.php" class="button">Se Connecter</a>
 
   <form action="" method="POST">
     <label for="nom">Nom :</label>

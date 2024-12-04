@@ -1,0 +1,55 @@
+Array
+(
+    [error] => Array
+        (
+            [message] => You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+            [type] => insufficient_quota
+            [param] => 
+            [code] => insufficient_quota
+        )
+
+)
+Array
+(
+    [error] => Array
+        (
+            [message] => Incorrect API key provided: votre_cl***********Ã¨te. You can find your API key at https://platform.openai.com/account/api-keys.
+            [type] => invalid_request_error
+            [param] => 
+            [code] => invalid_api_key
+        )
+
+)
+Array
+(
+    [error] => Array
+        (
+            [message] => Incorrect API key provided: votre_cl***********Ã¨te. You can find your API key at https://platform.openai.com/account/api-keys.
+            [type] => invalid_request_error
+            [param] => 
+            [code] => invalid_api_key
+        )
+
+)
+Array
+(
+    [error] => Array
+        (
+            [message] => Incorrect API key provided: votre_cl***********Ã¨te. You can find your API key at https://platform.openai.com/account/api-keys.
+            [type] => invalid_request_error
+            [param] => 
+            [code] => invalid_api_key
+        )
+
+)
+Array
+(
+    [error] => Array
+        (
+            [message] => Incorrect API key provided: votre_cl***********Ã¨te. You can find your API key at https://platform.openai.com/account/api-keys.
+            [type] => invalid_request_error
+            [param] => 
+            [code] => invalid_api_key
+        )
+
+)

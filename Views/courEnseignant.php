@@ -40,8 +40,8 @@ https://templatemo.com/tm-518-sentra
               color: black;}
               .button {
   position: relative;
-  top: 10px; /* Décalage vers le bas */
-  left: 200px; /* Décalage vers la droite */
+  top: 2px; /* Décalage vers le bas */
+  left: 300px; /* Décalage vers la droite */
   display: inline-block; /* Permet de contrôler la largeur et hauteur */
   padding: 10px 20px;    /* Espace intérieur pour agrandir le bouton */
   background-color: #007BFF; /* Couleur de fond du bouton */

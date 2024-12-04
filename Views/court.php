@@ -1,9 +1,18 @@
 <?php
 session_start();
+require_once '../Controller/notifC.php';
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: addUserconection.php');
     exit();
 }
+
+// Inclure le fichier de la classe de contrôle des notifications
+
+// Récupérer les notifications pour l'utilisateur connecté
+$user_id = $_SESSION['user_id'];
+$notifC = new NotifC();
+$notifications = $notifC->getNotificationsByUserId($user_id);
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +20,7 @@ if (!isset($_SESSION['user_id'])) {
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Sentra - Free Bootstrap Theme</title>
+        <title>Sentra - Free Bootstrap  Theme</title>
         
 <!-- 
 
@@ -24,14 +33,15 @@ https://templatemo.com/tm-518-sentra
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-        <link rel="stylesheet" href="cssf/bootstrap.min.css">
-        <link rel="stylesheet" href="cssf/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="cssf/fontAwesome.css">
-        <link rel="stylesheet" href="cssf/light-box.css">
-        <link rel="stylesheet" href="cssf/owl-carousel.css">
-        <link rel="stylesheet" href="cssf/templatemo-style.css">
+<link rel="stylesheet" href="cssf/bootstrap.min.css">
+<link rel="stylesheet" href="cssf/bootstrap-theme.min.css">
+<link rel="stylesheet" href="cssf/fontAwesome.css">
+<link rel="stylesheet" href="cssf/light-box.css">
+<link rel="stylesheet" href="cssf/owl-carousel.css">
+<link rel="stylesheet" href="cssf/templatemo-style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-        <link href="https://fontsf.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+<link href="https://fontsf.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
         <script src="jsf/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
         <style>
@@ -40,7 +50,7 @@ https://templatemo.com/tm-518-sentra
               color: black;}
               .button {
   position: relative;
-  top: 10px; /* Décalage vers le bas */
+  top: 4px; /* Décalage vers le bas */
   left: 200px; /* Décalage vers la droite */
   display: inline-block; /* Permet de contrôler la largeur et hauteur */
   padding: 10px 20px;    /* Espace intérieur pour agrandir le bouton */
@@ -60,6 +70,7 @@ https://templatemo.com/tm-518-sentra
   cursor: pointer;          /* Curseur en forme de main */
 }
           </style>
+          
     </head>
 
 <body>
@@ -159,6 +170,63 @@ https://templatemo.com/tm-518-sentra
               
               <div class="main-banner" id="top">
               <h1>Bienvenue, <?php echo $_SESSION['user_nom']; ?> a votre espace etudiant!</h1>
+              <div class="page-content">
+    
+        <h2>Vos Notifications</h2>
+    <?php if ($notifications): ?>
+        <?php foreach ($notifications as $notif): ?>
+            <div class="notification">
+                <!-- Bouton avec une icône de notification (utilisation de FontAwesome pour l'icône) -->
+                <button class="notification-button" onclick="toggleNotificationDetails(this)">
+                    <i class="fa fa-bell"></i>
+                </button>
+                <!-- Contenu caché de la notification -->
+                <div class="notification-details" style="display: none;">
+                    <h3><?php echo htmlspecialchars($notif['titre']); ?></h3>
+                    <p><?php echo nl2br(htmlspecialchars($notif['contenu'])); ?></p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Vous n'avez pas de notifications.</p>
+    <?php endif; ?>
+</section>
+
+<script>
+    function toggleNotificationDetails(button) {
+        // Trouve le conteneur des détails de la notification
+        const details = button.nextElementSibling;
+        if (details.style.display === 'none') {
+            details.style.display = 'block';
+        } else {
+            details.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    .notification-button {
+        background-color: #007BFF; /* Couleur du bouton */
+        color: white; /* Couleur de l'icône */
+        border: none;
+        padding: 10px;
+        border-radius: 50%; /* Pour rendre le bouton circulaire */
+        cursor: pointer;
+        font-size: 24px;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+    .notification-button:hover {
+        background-color: #0056b3;
+    }
+    .notification-details {
+        
+    }
+    .fa-bell {
+        font-size: 24px; /* Taille de l'icône */
+    }
+</style>
+    </div>
               <a href="logout.php" class="button">Déconnexion</a>
               </div>
           

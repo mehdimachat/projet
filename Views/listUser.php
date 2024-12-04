@@ -12,6 +12,36 @@ require_once '../Controller/UserC.php';
 $userC = new UserC();
 $users = $userC->listUser();
 ?>
+<?php
+require_once '../Controller/NotifC.php';
+
+$notifController = new NotifC();
+$notifs = $notifController->listNotif();
+?>
+<?php
+require_once '../Controller/NotifC.php';
+
+// Vérifie si le formulaire est soumis
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Récupère les données du formulaire
+    $titre = $_POST['titre'];
+    $contenu = $_POST['contenu'];
+    $id = $_POST['id']; // ID de l'utilisateur associé à la notification
+
+    // Crée un objet Notification et initialise les valeurs
+    $notif = new Notif(null, $titre, $contenu, $id);
+
+    // Appelle la fonction d'ajout
+    $notifC = new NotifC();
+    $notifC->addNotif($notif);
+
+    // Redirige vers la liste des notifications
+    header("Location: listUser.php");
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -141,8 +171,8 @@ tbody button:hover {
         </div>
         <ul>
             <!-- Change the href of Home to About.html -->
-            <li><a href="#1"><i class="fa fa-home"></i> <em>Home</em></a></li>
-            <li><a href="#2"><i class="fa fa-user"></i> <em>About</em></a></li>
+            <li><a href="#1"><i class="fa fa-home"></i> <em>User</em></a></li>
+            <li><a href="#2"><i class="fa fa-user"></i> <em>Notif</em></a></li>
             <li><a href="#3"><i class="fa fa-pencil"></i> <em>Entries</em></a></li>
             <li><a href="#4"><i class="fa fa-image"></i> <em>Work</em></a></li>
             <li><a href="#5"><i class="fa fa-envelope"></i> <em>Contact</em></a></li>
@@ -154,6 +184,8 @@ tbody button:hover {
         <div class="slides">
           <div class="slide" id="1">
           <a href="logoutlist.php" class="button">Déconnexion</a>
+          <a href="recherche.php" class="button">Recherche User</a>
+          <a href="recherche.php" class="button">Trie/Recherche List</a>
           <table border="1" cellpadding="10" cellspacing="0">
         <thead>
             <tr>
@@ -193,23 +225,177 @@ tbody button:hover {
               
           </div>
           <div class="slide" id="2">
-            <div class="content second-content">
+            <div >
                 <div class="container-fluid">
                     <div class="col-md-6">
-                        <div class="left-content">
-                            <h2>About Us</h2>
-                            <p>Please tell your friends about templatemo website. A variety of free CSS templates are available for immediate downloads.</p> 
-                            <p>Phasellus vitae faucibus orci. Etiam eleifend orci sed faucibus semper. Cras varius dolor et augue fringilla, eu commodo sapien iaculis. Donec eget dictum tellus. <a href="#">Curabitur</a> a interdum diam. Nulla vestibulum porttitor porta.</p>
-                            <p>Nulla vitae interdum libero, vel posuere ipsum. Phasellus interdum est et dapibus tempus. Vestibulum malesuada lorem condimentum mauris ornare dapibus. Curabitur tempor ligula et <a href="#">placerat</a> molestie.</p>
-                            <p>Aliquam efficitur eu purus in interdum. <a href="#">Etiam tincidunt</a> magna ex, sit amet lobortis felis bibendum id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-                          <div class="main-btn"><a href="#3">Read More</a></div>
-                      </div>
+                    <table>
+    <tr>
+        <th>ID</th>
+        <th>Titre</th>
+        <th>Contenu</th>
+        <th>Actions</th>
+    </tr>
+    <?php foreach ($notifs as $notif): ?>
+        <tr>
+            <td><?php echo $notif['id']; ?></td>
+            <td><?php echo $notif['titre']; ?></td>
+            <td><?php echo $notif['contenu']; ?></td>
+            <td>
+                
+                <a href="deleteNotif.php?idn=<?php echo $notif['idn']; ?>" onclick="return confirm('Voulez-vous vraiment supprimer cette notif ?');">Supprimer</a>
+
+                        <!-- Bouton pour modifier l'utilisateur -->
+                <a href="updateNotif.php?idn=<?php echo $notif['idn']; ?>"><button>Modifier</button></a>
+               
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+ 
+<form action="addNotif.php" method="POST">
+    <div>
+        <label for="titre">Titre :</label>
+        <input type="text" id="titre" name="titre" placeholder="titre"required>
+        <span id="titreError" style="color: red;"></span>
+    </div>
+    <div>
+        <label for="contenu">Contenu :</label>
+        <textarea id="contenu" name="contenu" placeholder="contenu" required></textarea>
+        <span id="contenuError" style="color: red;"></span>
+    </div>
+    <div>
+        <label for="id">Utilisateur :</label>
+        <select id="id" name="id" required>
+            <?php
+            require_once '../Controller/UserC.php';
+            $userC = new UserC();
+            $users = $userC->listUser();
+            foreach ($users as $user) {
+                echo "<option value='" . htmlspecialchars($user['id']) . "'>" . htmlspecialchars($user['nom'] . " " . $user['prenom']) . "</option>";
+            }
+            ?>
+        </select>
+        <span id="idError" style="color: red;"></span>
+    </div>
+    <div>
+        <button type="submit">Ajouter</button>
+    </div>
+</form>
+
+<script>
+document.getElementById('titre').addEventListener('keyup', function() {
+    const titre = this.value;
+    const titreError = document.getElementById('titreError');
+
+    if (titre.length < 3) {
+        titreError.textContent = "Le titre doit contenir au moins 3 caractères.";
+        titreError.style.color = 'red';
+    } else {
+        titreError.textContent = "Correct";
+        titreError.style.color = 'green';
+    }
+});
+
+document.getElementById('contenu').addEventListener('keyup', function() {
+    const contenu = this.value;
+    const contenuError = document.getElementById('contenuError');
+
+    if (contenu.length < 10) {
+        contenuError.textContent = "Le contenu doit contenir au moins 10 caractères.";
+        contenuError.style.color = 'red';
+    } else {
+        contenuError.textContent = "Correct";
+        contenuError.style.color = 'green';
+    }
+});
+
+document.getElementById('id').addEventListener('change', function() {
+    const id = this.value;
+    const idError = document.getElementById('idError');
+
+    if (!id) {
+        idError.textContent = "Veuillez sélectionner un utilisateur.";
+        idError.style.color = 'red';
+    } else {
+        idError.textContent = "Correct";
+        idError.style.color = 'green';
+    }
+});
+</script>
+<style>
+            /* Style du formulaire */
+            form {
+    position: relative;
+    top: -250px; /* Décalage vers le bas */
+    left: 900px; /* Décalage vers la droite */
+    background-color: grey;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour un effet d'élévation */
+    width: 400px;
+}
+
+/* Style des étiquettes */
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #0060f0f2;
+}
+
+/* Style des champs de saisie, des listes déroulantes et du bouton */
+form input,
+form select,
+form button {
+    width: 100%; /* Prend toute la largeur */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Effets de focus */
+form input:focus,
+form select:focus {
+    border-color: #0060f0f2;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 96, 240, 0.5);
+}
+
+/* Style du bouton */
+form button {
+    background-color: #0060f0f2;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet de survol du bouton */
+form button:hover {
+    background-color: #0050d1;
+}
+.error-message {
+            font-size: 0.9em;
+            color: red;
+            margin-left: 10px;
+        }
+        .success-message {
+            font-size: 0.9em;
+            color: green;
+            margin-left: 10px;
+          
+        }
+    
+
+          </style>
+        </div>
+        <div>
+
                     </div>
-                    <div class="col-md-6">
-                        <div class="right-image">
-                          <img src="imgbac/about_image.jpg" alt="">
-                      </div>
-                    </div>
+
                 </div>
             </div>
           </div>

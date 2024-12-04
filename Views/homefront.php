@@ -48,7 +48,27 @@ https://templatemo.com/tm-518-sentra
   background-color: #0056b3; /* Couleur au survol */
   border-color: #004080;    /* Bordure plus visible au survol */
   cursor: pointer;          /* Curseur en forme de main */
-}
+}  
+#clock {
+            top: 550px; /* Décalage vers le bas */
+            left: 0px;
+            font-size: 2rem;
+            font-family: 'Arial', sans-serif;
+            width: 250px;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            
+        }
+        #date {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #666;
+        }
           </style>
     </head>
 
@@ -69,7 +89,7 @@ https://templatemo.com/tm-518-sentra
                 <nav>
                     <ul class="nav navbar-nav">
                         <li><a href="#top">Home</a></li>
-                        <li><a href="#l">S'inscrire</a></li>
+                        <li><a href="#l">About As</a></li>
                         <li><a href="#projects">Recent Projects</a></li>
                         <li><a href="#video">Presentation</a></li>
                         <li><a href="#blog">Blog Entries</a></li>
@@ -97,7 +117,7 @@ https://templatemo.com/tm-518-sentra
                         <a href="#l">
                             <span class="rect"></span>
                             <span class="circle"></span>
-                            S'inscrire
+                            About As
                         </a>
                     </li>
                     <li>
@@ -142,10 +162,42 @@ https://templatemo.com/tm-518-sentra
         
                     <a href="addUser.php" class="button">S'inscrire</a>
                     <a href="addUserconection.php" class="button">Se Connecter</a>
-                    <a href="homefront.html" class="button">Return Home</a>
+                    <a href="listUser.php" class="button">List User</a>
+                    <a href="calculatrise.php" class="button">Calculatrise</a>
+                    <a href="blocnote.php" class="button">Bloc Note</a>
+                    <a href="calendrier.php" class="button">Calendrier</a>
+                    <a href="jeux.php" class="button">Jeux Montal</a>
 
-                    
-          
+                    <div id="clock">
+        <div id="time"></div>
+        <div id="date"></div>
+    </div>
+
+    <!-- Script JavaScript pour mettre à jour l'heure et la date en temps réel -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            const dateString = `${day}/${month}/${year}`;
+
+            document.getElementById('time').innerText = timeString;
+            document.getElementById('date').innerText = dateString;
+        }
+
+        // Mettre à jour l'heure immédiatement et puis toutes les secondes
+        setInterval(updateClock, 1000);
+        updateClock(); // Appel initial pour afficher l'heure sans attendre une seconde
+    </script>
+    
+    <!-- Affichage de la montre dynamique -->
+   
               
         <div class="slider">
             <div class="Modern-Slider content-section" id="top">
@@ -157,10 +209,10 @@ https://templatemo.com/tm-518-sentra
               
               <div class="main-banner" id="top">
 
-  
+                  
               </div>
 
-          
+
                 </div>
                 <!-- // Item -->
                 <!-- Item -->
@@ -169,7 +221,7 @@ https://templatemo.com/tm-518-sentra
             </div>
         </div>
 
-
+        
         <div class="page-content">
             <section id="featured" class="content-section">
                 <div class="section-heading">

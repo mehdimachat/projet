@@ -284,7 +284,9 @@ form button:hover {
     
                     
                       <a href="addUser.php" class="button">S'inscrire</a>
-                      <a href="homefront.html" class="button">Return Home</a>
+                      <a href="homefront.php" class="button">Return Home</a>
+                      <a href="forgot_Password.php" class="button">mot de passe oubliée</a>
+
   <form action="addUserconection.php" method="POST">
         <label for="email">Email :</label>
         <input type="email" name="email" id="email" placeholder="Email" required>

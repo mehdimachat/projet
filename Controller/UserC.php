@@ -111,7 +111,52 @@ public function getUserByEmail($email) {
 
     return $stmt->fetch(PDO::FETCH_ASSOC); // Retourne l'utilisateur trouvé ou false si non trouvé
 }
+public function getUserByName($nom, $prenom) {
+    $sql = "SELECT * FROM User WHERE nom = :nom AND prenom = :prenom";
+    $db = Config::getConnexion();
+    $query = $db->prepare($sql);
+    $query->execute(['nom' => $nom, 'prenom' => $prenom]);
+    return $query->fetch(); // Retourne l'utilisateur si trouvé, sinon false
+}
+public function listUserBy($column, $order) {
+    $allowedColumns = ['id', 'nom', 'email']; // Colonnes autorisées
+    $allowedOrders = ['ASC', 'DESC']; // Ordres autorisés
 
+    // Validation des entrées
+    if (!in_array($column, $allowedColumns) || !in_array($order, $allowedOrders)) {
+        throw new Exception("Critère de tri invalide.");
+    }
+
+    // Requête SQL avec tri
+    $sql = "SELECT * FROM User ORDER BY $column $order";
+    $db = Config::getConnexion();
+    try {
+        $query = $db->query($sql);
+        return $query->fetchAll();
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
+}
+public function envoyerMotDePasse($email) {
+    $user = $this->getUserByEmail($email);
+    if ($user) {
+        $motDePasse = $user['mot_de_passe'];
+        
+        // Envoi de l'email
+        $to = $email;
+        $subject = "Récupération de votre mot de passe";
+        $message = "Bonjour,\n\nVoici votre mot de passe : " . $motDePasse;
+        $headers = "From: no-reply@votre-site.com";
+
+        if (mail($to, $subject, $message, $headers)) {
+            echo "Un email contenant votre mot de passe a été envoyé.";
+        } else {
+            echo "Erreur lors de l'envoi de l'email.";
+        }
+    } else {
+        echo "Aucun utilisateur trouvé avec cet email.";
+    }
+}
 
 }
 ?>

@@ -152,7 +152,7 @@ form button:hover {
         </div>
         <ul>
             <!-- Change the href of Home to About.html -->
-            <li><a href="#1"><i class="fa fa-home"></i> <em>Home</em></a></li>
+            <li><a href="#1"><i class="fa fa-home"></i> <em>Admin</em></a></li>
             <li><a href="#2"><i class="fa fa-user"></i> <em>About</em></a></li>
             <li><a href="#3"><i class="fa fa-pencil"></i> <em>Entries</em></a></li>
             <li><a href="#4"><i class="fa fa-image"></i> <em>Work</em></a></li>
@@ -163,7 +163,7 @@ form button:hover {
 
         <div class="slides">
           <div class="slide" id="1">
-          <a href="homefront.html" class="button">Return Home</a>
+          <a href="homefront.php" class="button">Return Home</a>
           <?php
     // Display error message if any
     if (isset($_SESSION['error'])) {
@@ -172,20 +172,47 @@ form button:hover {
     }
     ?>
 
-    <form method="POST" action="login.php">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-    </form>
-              
+<form method="POST" action="login.php">
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <span id="emailError" style="color: red;"></span>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="password"required>
+        <span id="passwordError" style="color: red;"></span>
+    </div>
+    <div>
+        <button type="submit">Login</button>
+    </div>
+</form>
+    <script>
+document.getElementById('email').addEventListener('keyup', function() {
+    const email = this.value;
+    const emailError = document.getElementById('emailError');
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+    if (!emailPattern.test(email)) {
+        emailError.textContent = "Email invalide.";
+    } else {
+        emailError.textContent = "Correct";
+        emailError.style.color = 'green';
+    }
+});
+
+document.getElementById('password').addEventListener('keyup', function() {
+    const password = this.value;
+    const passwordError = document.getElementById('passwordError');
+
+    if (password.length < 6) {
+        passwordError.textContent = "Le mot de passe doit comporter au moins 6 caractères.";
+    } else {
+        passwordError.textContent = "Correct";
+        passwordError.style.color = 'green';
+    }
+});
+</script>
           </div>
           <div class="slide" id="2">
             <div class="content second-content">
